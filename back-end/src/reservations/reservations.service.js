@@ -44,7 +44,7 @@ const destroy =(reservation_id)=>{
 module.exports={
     list,
     listByDate,
-    listByPhoneNumber,
+    listByMobileNumber,
     read,
     update,
     destroy,
