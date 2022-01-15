@@ -8,9 +8,9 @@ async function list(req, res) {
   const {mobile_number} = req.query
   let data
   if(date){
-    data = await service.listByDate()
+    data = await service.listByDate(date)
   }else if(mobile_number){
-    data = await service.listByMobileNumber()
+    data = await service.listByMobileNumber(mobile_number)
   }else{
     data = await service.list()
   }
