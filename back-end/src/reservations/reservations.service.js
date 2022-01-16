@@ -12,8 +12,11 @@ const listByDate =(reservation_date)=>{
 }
 const listByMobileNumber =(mobile_number)=>{
     return knex("reservations")
-        .select("*")
-        .where({mobile_number})
+        .whereRaw(
+            "translate(mobile_number, '() -', '') like ?",
+            `%${mobile_number.replace(/\D/g, "")}%`
+        )
+      .orderBy("reservation_date");
 }
 const read =(reservation_id)=>{
     return knex("reservations")
