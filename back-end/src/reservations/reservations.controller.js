@@ -1,5 +1,6 @@
 const service = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
+const hasProperties = require("../errors/hasProperties")
 /**
  * List handler for reservation resources
  */
@@ -18,8 +19,7 @@ res.json({data})
 }
 
 async function read(req, res) {
-const data = await service.read()
-res.json({data})
+  res.json({data: await service.read(res.locals.reservation.reservation_id)})
 }
 async function create(req, res) {
 const data = await service.create(res.locals.reservation)
@@ -35,12 +35,30 @@ async function update(req, res){
   res.json({data})
 }
 async function destroy(req, res) {
-const data = await service.destroy()
-res.json({data})
+  await service.destroy(res.locals.reservation.reservation_id)
+  res.sendStatus(201)
 }
-//validatoin functions
-
-
+//Validation functions
+const reservationExists = async (req,res,next)=>{
+  const {reservation_id}=req.params
+  const reservation = await service.read(reservation_id)
+  if(reservation){
+    res.locals.reservation = reservation
+    next()
+  }else{
+    next({
+      status:404,
+      message:`Sorry no reservation found with id:${reservation_id}`
+    })
+  }
+}
+const validFields=[]
+const hasValidFields
+const hasOnlyValidFields
 module.exports = {
   list,
+  read:[asyncErrorBoundary(reservationExists),read],
+  update,
+  create,
+  delete:[asyncErrorBoundary(reservationExists),destroy]
 };
