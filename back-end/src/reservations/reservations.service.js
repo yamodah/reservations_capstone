@@ -3,12 +3,13 @@ const knex = require("../db/connection")
 const list =()=>{
     return knex("reservations")
         .select("*")
-        .orderBy("reservation_date")
+        .orderBy("reservation_time")
 }
 const listByDate =(reservation_date)=>{
     return knex("reservations")
         .select("*")
         .where({reservation_date})
+        .orderBy("reservation_time")
 }
 const listByMobileNumber =(mobile_number)=>{
     return knex("reservations")

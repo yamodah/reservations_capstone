@@ -26,8 +26,8 @@ async function read(req, res) {
   res.json({ data: await service.read(res.locals.reservation.reservation_id) });
 }
 async function create(req, res) {
-  const data = await service.create(res.locals.reservation);
-  res.json({ data });
+  const data = await service.create(req.body.data);
+  res.status(201).json({ data });
 }
 async function update(req, res) {
   const { reservation_id } = res.locals.reservation;
@@ -46,8 +46,8 @@ async function destroy(req, res) {
 //======VALIDATION FUNCTIONS========//
 
 const reservationExists = async (req, res, next) => {
-  const { reservation_id } = req.params;
-  const reservation = await service.read(reservation_id);
+  const { reservationId } = req.params;
+  const reservation = await service.read(reservationId);
   if (reservation) {
     //stores found reservation in locals object to remove the need for unnecessary queries in the future
     res.locals.reservation = reservation;
@@ -55,7 +55,7 @@ const reservationExists = async (req, res, next) => {
   } else {
     next({
       status: 404,
-      message: `Sorry no reservation found with id:${reservation_id}`,
+      message: `Sorry no reservation found with id:${reservationId}`,
     });
   }
 };
@@ -82,7 +82,7 @@ const VALID_PROPERTIES = [
 ];
 const requiredFieldsCheck = hasProperties(...VALID_PROPERTIES);
 const dateValidation = (req, res, next) => {
-  const { reservation_date } = req.bod.data;
+  const { reservation_date } = req.body.data;
   const today = new Date();
   const reservationDate = new Date(reservation_date);
   //regex to match only digits in YYYY-MM-DD format
@@ -90,35 +90,36 @@ const dateValidation = (req, res, next) => {
 
   //in case a reservation needs to changed the same day
   if (res.locals.reservation) return next();
-
+  
   if (!dateFormat.test(reservation_date)) {
     next({
       status: 400,
-      message: "Date must be submitted in 'YYYY-MM-DD' format.",
+      message: "reservation_date must be submitted in 'YYYY-MM-DD' format.",
     });
   } else if (reservationDate < today) {
     next({
       status: 400,
-      message: "Reservations must be made at least a day in advance",
+      message: "reservation_date must be made at least a day in advance",
     });
-  } else if (reservation_date.getDay() === 2) {
+  } else if (reservationDate.getUTCDay() === 2) {
     // '2' is the equivalent to Tuesday
+    console.log(reservationDate.getDay())
     next({
       status: 400,
-      message: "Sorry we are closed on Tuesdays",
+      message: "Sorry we are closed on Tuesdays please pick a different reservation_date",
     });
   } else {
     next();
   }
 };
 const timeValidation = (req, res, next) => {
-  const { reservation_time } = req.bod.data;
+  const { reservation_time } = req.body.data;
   //regex to match time formats (only digits, and hours then minutes, etc.)
   const timeFormat = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/;
   if(!timeFormat.test(reservation_time)){
     next({
       status:400,
-      message:"'time' must be submitted in 'HH:MM:SS' or 'HH:MM' format"
+      message:"'reservation_time' must be submitted in 'HH:MM:SS' or 'HH:MM' format"
     })
   }else if( reservation_time< "10:30" || reservation_time > "21:30"){
     next({
@@ -130,7 +131,7 @@ const timeValidation = (req, res, next) => {
   }
 };
 const peopleValidation = (req, res, next) => {
-  const { people } = req.bod.data;
+  const { people } = req.body.data;
   //SQL column for poeple is for integers 
   if(people<=0||typeof people !== "number"){
     next({
