@@ -24,6 +24,14 @@ function hasProperties(...properties) {
     }
   };
 }
+const VALID_PROPERTIES = [
+  "first_name",
+  "last_name",
+  "mobile_number",
+  "reservation_date",
+  "reservation_time",
+  "people"
+];
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
 

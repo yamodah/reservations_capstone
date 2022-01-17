@@ -38,11 +38,13 @@ async function destroy(req, res) {
   await service.destroy(res.locals.reservation.reservation_id)
   res.sendStatus(201)
 }
-//Validation functions
+//VALIDATION FUNCTIONS
+
 const reservationExists = async (req,res,next)=>{
   const {reservation_id}=req.params
   const reservation = await service.read(reservation_id)
   if(reservation){
+    //stores found reservation in locals object to remove the need for unnecessary queries in the future
     res.locals.reservation = reservation
     next()
   }else{
@@ -52,24 +54,64 @@ const reservationExists = async (req,res,next)=>{
     })
   }
 }
+//checking is data is even present or if the request is empty
+const hasPayload = (req,res,next)=>{
+  const data = req.body.data
+  if(!data){
+    next({
+      status:400,
+      message:"Data is required for a valid request"
+    })
+  }else{
+    next()
+  }
+}
+//Named to work with hasOnlyValidProperties function
 const VALID_PROPERTIES = [
-  "supplier_name",
-  "supplier_address_line_1",
-  "supplier_address_line_2",
-  "supplier_city",
-  "supplier_state",
-  "supplier_zip",
-  "supplier_phone",
-  "supplier_email",
-  "supplier_notes",
-  "supplier_type_of_goods",
+  "first_name",
+  "last_name",
+  "mobile_number",
+  "reservation_date",
+  "reservation_time",
+  "people"
 ];
-const hasValidFields = hasProperties(validFields)
-const hasOnlyValidFields
+const requiredFieldsCheck = hasProperties(...VALID_PROPERTIES)
+const dateValidation = (req,res,next)=>{
+  const { reservation_date } = req.bod.data
+  const today = new Date()
+  const reservationDate = new Date(reservation_date)
+  const dateFormat = /\d\d\d\d-\d\d-\d\d/
+  if(!reservation_date.match(dateFormat)){
+    next({
+      status:400,
+      message:"Date must be submitted in 'YYYY-MM-DD' format."
+    })
+  }else if(reservationDate < today){
+    next({
+      status:400,
+      message:"Reservations must be made at least a day in advance"
+    })
+  }else if(reservation_date.getDay()=== 2){
+    // '2' is the equivalent to Tuesday
+    next({
+      status:400,
+      message:"Sorry we are closed on Tuesdays"
+    })
+  }else{
+    next()
+  }
+}
+const timeValidation = (req,res,next)=>{
+  const { people } = req.bod.data
+  const timeFormat = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/
+}
+const peopleValidation = (req,res,next)=>{
+const { people } = req.bod.data
+}
 module.exports = {
   list,
   read:[asyncErrorBoundary(reservationExists),read],
-  update,
-  create,
+  update:[asyncErrorBoundary(reservationExists),requiredFieldsCheck],
+  create:[hasPayload,requiredFieldsCheck,hasOnlyValidProperties,],
   delete:[asyncErrorBoundary(reservationExists),destroy]
 };
