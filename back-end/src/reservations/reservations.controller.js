@@ -1,6 +1,6 @@
 const service = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
-const hasProperties = require("../errors/hasProperties")
+const {hasProperties, hasOnlyValidProperties} = require("../errors/hasProperties")
 /**
  * List handler for reservation resources
  */
@@ -52,8 +52,19 @@ const reservationExists = async (req,res,next)=>{
     })
   }
 }
-const validFields=[]
-const hasValidFields
+const VALID_PROPERTIES = [
+  "supplier_name",
+  "supplier_address_line_1",
+  "supplier_address_line_2",
+  "supplier_city",
+  "supplier_state",
+  "supplier_zip",
+  "supplier_phone",
+  "supplier_email",
+  "supplier_notes",
+  "supplier_type_of_goods",
+];
+const hasValidFields = hasProperties(validFields)
 const hasOnlyValidFields
 module.exports = {
   list,
