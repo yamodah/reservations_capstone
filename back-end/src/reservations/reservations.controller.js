@@ -99,7 +99,7 @@ const dateValidation = (req, res, next) => {
   } else if (reservationDate < today) {
     next({
       status: 400,
-      message: "reservation_date must be made at least a day in advance",
+      message: "reservation_date must be made at least a day in the future",
     });
   } else if (reservationDate.getUTCDay() === 2) {
     // '2' is the equivalent to Tuesday
