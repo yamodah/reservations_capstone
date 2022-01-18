@@ -1,9 +1,6 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const {
-  hasProperties,
-  hasOnlyValidProperties,
-} = require("../errors/hasProperties");
+const hasProperties = require("../errors/hasProperties");
 /**
  * List handler for reservation resources
  */
@@ -80,6 +77,21 @@ const VALID_PROPERTIES = [
   "reservation_time",
   "people",
 ];
+const hasOnlyValidProperties = (req, res, next)=> {
+  const { data = {} } = req.body;
+
+  const invalidFields = Object.keys(data).filter(
+    (field) => !VALID_PROPERTIES.includes(field)
+  );
+
+  if (invalidFields.length) {
+    return next({
+      status: 400,
+      message: `Invalid field(s): ${invalidFields.join(", ")}`,
+    });
+  }
+  next();
+}
 const requiredFieldsCheck = hasProperties(...VALID_PROPERTIES);
 const dateValidation = (req, res, next) => {
   const { reservation_date } = req.body.data;
@@ -143,7 +155,7 @@ const peopleValidation = (req, res, next) => {
 }
 ;
 module.exports = {
-  list,
+  list:asyncErrorBoundary(list),
   read: [asyncErrorBoundary(reservationExists), read],
   update: [
     asyncErrorBoundary(reservationExists),
