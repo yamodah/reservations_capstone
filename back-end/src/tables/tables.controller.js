@@ -2,29 +2,31 @@ const service = require("./tables.service");
 const reservationsService = require("../reservations/reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
+
 async function list(req, res, next) {
-  res.json({ data: await service.list() });
+  res.json({ data: await service.list()});
 }
 async function create(req, res, next) {
-  res.status(201).json({ data: await service.list(req.body.data) });
+    const data=await service.create(req.body.data)
+  res.status(201).json({ data });
 }
 //pairs table with reservation and changes reservation status to seated
 async function seatReservation(req, res, next) {
   const { reservation_id } = res.locals.reservation;
-  const { tableId } = req.params;
-  res.json({ data: await service.updateToSeated(tableId, reservation_id) });
+  const { table_id } = req.params;
+  res.json({ data: await service.updateToSeated(table_id, reservation_id) });
 }
 //removes reservation assignment from table and changes reservation status to finished
 async function clear(req, res, next) {
   const { reservation_id } = req.body.data;
-  const { tableId } = req.params;
-  res.json({ data: await service.updateToSeated(tableId, reservation_id) });
+  const { table_id } = req.params;
+  res.json({ data: await service.updateToSeated(table_id, reservation_id) });
 }
 
 //======VALIDATION FUNCTIONS========//
 
 const reservationExists = async (req, res, next) => {
-  const { reservationId } = req.params;
+  const { reservation_id } = req.body.data;
   const reservation = await reservationsService.read(reservationId);
   if (reservation) {
     //stores found reservation in locals object to remove the need for unnecessary queries in the future
@@ -33,13 +35,13 @@ const reservationExists = async (req, res, next) => {
   } else {
     next({
       status: 404,
-      message: `Sorry no reservation found with id:${reservationId}`,
+      message: `Sorry no reservation found with id:${reservation_id}`,
     });
   }
 };
 const tableExists = async (req, res, next) => {
-  const { tableId } = req.params;
-  const table = await service.read(tableId);
+  const { table_id } = req.params;
+  const table = await service.read(table_id);
   if (table) {
     //stores found reservation in locals object to remove the need for unnecessary queries in the future
     res.locals.table = table;
@@ -47,7 +49,7 @@ const tableExists = async (req, res, next) => {
   } else {
     next({
       status: 404,
-      message: `Sorry no table found with id:${tableId}`,
+      message: `Sorry no table found with id:${table_id}`,
     });
   }
 };
@@ -71,15 +73,17 @@ const tableNameValidation = (req, res, next) => {
       message: "'table_name' must be at least two characters",
     });
   }
+  next()
 };
 const capacityValidation = (req, res, next) => {
   const { capacity } = req.body.data;
-  if (!capacity || capacity <= 0) {
+  if (!capacity || capacity <= 0||typeof capacity!=="number") {
     return next({
       status: 400,
-      message: "'capacity' must be greater than 0",
+      message: "'capacity' must be a number greater than 0",
     });
   }
+  next()
 };
 const VALID_PROPERTIES = [
     "table_name", "capacity", "reservation_id"
@@ -99,7 +103,8 @@ const hasOnlyValidProperties = (req, res, next) => {
   }
   next();
 };
-const requiredFieldsCheck = hasProperties(...VALID_PROPERTIES);
+const requiredFieldsCheckCreate = hasProperties(...VALID_PROPERTIES.slice(0,2));
+const requiredFieldsCheckUpdate = hasProperties(...VALID_PROPERTIES.slice(2));
 
 const statusValidation = (req,res,next)=>{
     const {status}=res.locals.reservation
@@ -126,7 +131,7 @@ module.exports = {
   list: asyncErrorBoundary(list),
   create: [
     hasPayload,
-    requiredFieldsCheck,
+    requiredFieldsCheckCreate,
     hasOnlyValidProperties,
     tableNameValidation,
     capacityValidation,
@@ -136,7 +141,7 @@ module.exports = {
     hasPayload,
     asyncErrorBoundary(tableExists),
     asyncErrorBoundary(reservationExists),
-    requiredFieldsCheck,
+    requiredFieldsCheckUpdate,
     hasOnlyValidProperties,
     statusValidation,
     capacityCheck,
