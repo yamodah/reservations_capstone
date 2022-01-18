@@ -27,7 +27,7 @@ async function clear(req, res, next) {
 
 const reservationExists = async (req, res, next) => {
   const { reservation_id } = req.body.data;
-  const reservation = await reservationsService.read(reservationId);
+  const reservation = await reservationsService.read(reservation_id);
   if (reservation) {
     //stores found reservation in locals object to remove the need for unnecessary queries in the future
     res.locals.reservation = reservation;
@@ -140,8 +140,8 @@ module.exports = {
   update: [
     hasPayload,
     asyncErrorBoundary(tableExists),
-    asyncErrorBoundary(reservationExists),
     requiredFieldsCheckUpdate,
+    asyncErrorBoundary(reservationExists),
     hasOnlyValidProperties,
     statusValidation,
     capacityCheck,
