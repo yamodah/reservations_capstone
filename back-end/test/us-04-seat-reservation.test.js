@@ -201,6 +201,7 @@ describe("US-04 - Seat reservation", () => {
       });
 
       test("returns 400 if reservation_id is missing", async () => {
+        console.log(tableOne)
         expect(tableOne).not.toBeUndefined();
         const data = {};
 
