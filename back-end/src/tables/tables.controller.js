@@ -14,7 +14,7 @@ async function create(req, res, next) {
 async function seatReservation(req, res, next) {
   const { reservation_id } = res.locals.reservation;
   const { table_id } = req.params;
-  res.json({ data: await service.updateToSeated(table_id, reservation_id) });
+  res.json({ data: await service.updateToSeated(Number(table_id), reservation_id) });
 }
 //removes reservation assignment from table and changes reservation status to finished
 async function clear(req, res, next) {
@@ -127,6 +127,16 @@ const capacityCheck = (req,res,next) =>{
     }
     next()
 }
+const occupancyCheck = (req,res,next)=>{
+    const {reservation_id} = res.locals.table
+    if(reservation_id){
+        return next({
+            status:400,
+            message:"Sorry this table is already occupied"
+        })
+    }
+    next()
+}
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -145,6 +155,7 @@ module.exports = {
     hasOnlyValidProperties,
     statusValidation,
     capacityCheck,
+    occupancyCheck,
     asyncErrorBoundary(seatReservation)
   ],
   delete: [],
