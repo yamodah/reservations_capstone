@@ -43,16 +43,18 @@ async function destroy(req, res) {
 //======VALIDATION FUNCTIONS========//
 
 const reservationExists = async (req, res, next) => {
-  const { reservationId } = req.params;
-  const reservation = await service.read(reservationId);
+  const { reservation_id } = req.params;
+  const reservation = await service.read(reservation_id);
   if (reservation) {
+    // console.log("res exists")
     //stores found reservation in locals object to remove the need for unnecessary queries in the future
     res.locals.reservation = reservation;
     next();
   } else {
+    // console.log("no res")
     next({
       status: 404,
-      message: `Sorry no reservation found with id:${reservationId}`,
+      message: `Sorry no reservation found with id:${reservation_id}`,
     });
   }
 };
@@ -162,12 +164,34 @@ const peopleValidation = (req, res, next) => {
 };
 const statusValidation = (req, res, next) => {
   const { status } = req.body.data;
-  if (!["booked", "finished", "cancelled", "finished"].includes(status)) {
+  if (!["booked", "seated", "cancelled", "finished"].includes(status)) {
     return next({
       status: 400,
       message: `${status} is not a valid status`,
     });
   }
+  next();
+};
+const finishedNotAllowed = (req, res, next) => {
+  const { status } = res.locals.reservation;
+  if (status === "finished") {
+    return next({
+      status: 400,
+      message: `${status} reservation cannot be updated`,
+    });
+  }
+  next();
+};
+const bookedValidation = (req, res, next) => {
+  const { status } = req.body.data;
+  if(status){
+    if (status !== "booked") {
+      return next({
+        status: 400,
+        message: `Status:${status} is not valid. Reservation must start off as "book"`,
+      });
+    }
+}
   next();
 };
 module.exports = {
@@ -183,12 +207,14 @@ module.exports = {
   ],
   updateStatus: [
     asyncErrorBoundary(reservationExists),
-
+    finishedNotAllowed,
+    statusValidation,
     asyncErrorBoundary(update),
   ],
   create: [
     hasPayload,
     requiredFieldsCheck,
+    bookedValidation,
     hasOnlyValidProperties,
     dateValidation,
     timeValidation,
