@@ -9,6 +9,8 @@ const listByDate =(reservation_date)=>{
     return knex("reservations")
         .select("*")
         .where({reservation_date})
+        .whereNot({status:"finished"})
+        .whereNot({status:"cancelled"})
         .orderBy("reservation_time")
 }
 const listByMobileNumber =(mobile_number)=>{
@@ -31,13 +33,13 @@ const create =(newReservation)=>{
         .returning("*")
         .then((reservation)=>reservation[0])
 }
-const update =({reservation_id})=>{
+const update =(updatedReservation)=>{
     return knex("reservations")
         .select("*")
-        .where({reservation_id})
-        .update(updatedworkout)
+        .where({reservation_id:updatedReservation.reservation_id})
+        .update(updatedReservation)
         .returning("*")
-        .then((workout)=>workout[0])
+        .then((newResArr)=>newResArr[0])
 }
 const destroy =(reservation_id)=>{
     return knex("reservations")

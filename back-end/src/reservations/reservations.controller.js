@@ -76,6 +76,7 @@ const VALID_PROPERTIES = [
   "reservation_date",
   "reservation_time",
   "people",
+  "status"
 ];
 const hasOnlyValidProperties = (req, res, next)=> {
   const { data = {} } = req.body;
@@ -92,7 +93,8 @@ const hasOnlyValidProperties = (req, res, next)=> {
   }
   next();
 }
-const requiredFieldsCheck = hasProperties(...VALID_PROPERTIES);
+//uses vlaid properties array but we dont grab status because its not required
+const requiredFieldsCheck = hasProperties(...VALID_PROPERTIES.slice(0,6));
 const dateValidation = (req, res, next) => {
   const { reservation_date } = req.body.data;
   const today = new Date();
