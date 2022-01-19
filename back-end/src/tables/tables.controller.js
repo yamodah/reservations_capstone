@@ -19,7 +19,7 @@ async function seatReservation(req, res, next) {
 //removes reservation assignment from table and changes reservation status to finished
 async function clear(req, res, next) {
   const { reservation_id,table_id } = res.locals.table;
-  res.status(200).json({ data: await service.updateToSeated(table_id, reservation_id) });
+  res.status(200).json({ data: await service.cleanTable(Number(table_id), reservation_id) });
 }
 
 //======VALIDATION FUNCTIONS========//

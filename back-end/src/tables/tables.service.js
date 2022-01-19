@@ -35,7 +35,7 @@ const destroy = (table_id) => {
         .where({table_id})
         .del()
 };
-const cleanTable = () => {
+const cleanTable = (table_id, reservation_id) => {
     return knex("tables")
         .where({table_id})
         .update({reservation_id:null})
