@@ -1,8 +1,9 @@
 const knex = require("../db/connection")
 
-const list =()=>{
+const list =(reservation_date)=>{
     return knex("reservations")
         .select("*")
+        .where({reservation_date})
         .orderBy("reservation_time")
 }
 const listByDate =(reservation_date)=>{
