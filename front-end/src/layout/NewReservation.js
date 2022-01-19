@@ -1,7 +1,9 @@
 import React, { useState }  from 'react'
+import { useHistory } from 'react-router-dom'
 import {asDateString} from "../utils/date-time"
 function NewReservation() {
     const date = new Date()
+    const history = useHistory()
     const initialFormState = {
         first_name:"",
         last_name:"",
@@ -23,9 +25,13 @@ function NewReservation() {
           ...form,
           [e.target.id]: Number(e.target.value),
         });
-        console.log( typeof Number(e.target.value))
+        // console.log( typeof Number(e.target.value))
       };
-      
+      const handleSubmission =async (e)=>{
+          e.preventDefault()
+          const AC = new AbortController()
+          
+      }
     return (
         <form >
             <div className="mb-3">
@@ -54,7 +60,10 @@ function NewReservation() {
             </div>
             <button onClick={(e)=>{
                 e.preventDefault()
-                console.log(form)}}>console.log the date but just the day</button>
+                history.goBack()}}>cancel</button>
+            <button onClick={(e)=>{
+                e.preventDefault()
+                console.log(form)}}>submit</button>
         </form>
     )
 }
