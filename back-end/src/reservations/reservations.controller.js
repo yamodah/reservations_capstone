@@ -29,7 +29,7 @@ async function create(req, res) {
 async function update(req, res) {
   const { reservation_id } = res.locals.reservation;
   const editedReservation = {
-    ...req.body,
+    ...req.body.data,
     reservation_id,
   };
   const data = await service.update(editedReservation);
@@ -76,9 +76,9 @@ const VALID_PROPERTIES = [
   "reservation_date",
   "reservation_time",
   "people",
-  "status"
+  "status",
 ];
-const hasOnlyValidProperties = (req, res, next)=> {
+const hasOnlyValidProperties = (req, res, next) => {
   const { data = {} } = req.body;
 
   const invalidFields = Object.keys(data).filter(
@@ -92,9 +92,10 @@ const hasOnlyValidProperties = (req, res, next)=> {
     });
   }
   next();
-}
+};
 //uses vlaid properties array but we dont grab status because its not required
-const requiredFieldsCheck = hasProperties(...VALID_PROPERTIES.slice(0,6));
+const requiredFieldsCheck = hasProperties(...VALID_PROPERTIES.slice(0, 6));
+
 const dateValidation = (req, res, next) => {
   const { reservation_date } = req.body.data;
   const today = new Date();
@@ -103,61 +104,74 @@ const dateValidation = (req, res, next) => {
   const dateFormat = /\d\d\d\d-\d\d-\d\d/;
 
   //in case a reservation needs to changed the same day
-  if (res.locals.reservation) return next();
-  
+
   if (!dateFormat.test(reservation_date)) {
     next({
       status: 400,
       message: "reservation_date must be submitted in 'YYYY-MM-DD' format.",
     });
+  } else if (reservationDate.getUTCDay() === 2) {
+    next({
+      status: 400,
+      message:
+        "Sorry we are closed on Tuesdays please pick a different reservation_date",
+    });
+  } else if (res.locals.reservation) {
+    return next();
+    // '2' is the equivalent to Tuesday
   } else if (reservationDate < today) {
     next({
       status: 400,
       message: "reservation_date must be made at least a day in the future",
     });
-  } else if (reservationDate.getUTCDay() === 2) {
-    // '2' is the equivalent to Tuesday
-    console.log(reservationDate.getDay())
+  } else {
+    next();
+  }
+};
+
+const timeValidation = (req, res, next) => {
+  const { reservation_time } = req.body.data;
+  //regex to match time formats (only digits, and hours then minutes, etc.)
+  const timeFormat = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/;
+  if (!timeFormat.test(reservation_time)) {
     next({
       status: 400,
-      message: "Sorry we are closed on Tuesdays please pick a different reservation_date",
+      message:
+        "'reservation_time' must be submitted in 'HH:MM:SS' or 'HH:MM' format",
+    });
+  } else if (reservation_time < "10:30" || reservation_time > "21:30") {
+    next({
+      status: 400,
+      message: "reservations must be made between 10:30AM  and 9:30PM",
     });
   } else {
     next();
   }
 };
-const timeValidation = (req, res, next) => {
-  const { reservation_time } = req.body.data;
-  //regex to match time formats (only digits, and hours then minutes, etc.)
-  const timeFormat = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/;
-  if(!timeFormat.test(reservation_time)){
-    next({
-      status:400,
-      message:"'reservation_time' must be submitted in 'HH:MM:SS' or 'HH:MM' format"
-    })
-  }else if( reservation_time< "10:30" || reservation_time > "21:30"){
-    next({
-      status:400,
-      message:"reservations must be made between 10:30AM  and 9:30PM"
-    })
-  }else{
-    next()
-  }
-};
 const peopleValidation = (req, res, next) => {
   const { people } = req.body.data;
-  //SQL column for poeple is for integers 
-  if(people<=0||typeof people !== "number"){
+  //SQL column for poeple is for integers
+  if (people <= 0 || typeof people !== "number") {
     next({
-      status:400,
-      message:"'people' must be a NUMBER greater than 0"
-    })}else{
-      next()
-    }
-}
-;
+      status: 400,
+      message: "'people' must be a NUMBER greater than 0",
+    });
+  } else {
+    next();
+  }
+};
+const statusValidation = (req, res, next) => {
+  const { status } = req.body.data;
+  if (!["booked", "finished", "cancelled", "finished"].includes(status)) {
+    return next({
+      status: 400,
+      message: `${status} is not a valid status`,
+    });
+  }
+  next();
+};
 module.exports = {
-  list:asyncErrorBoundary(list),
+  list: asyncErrorBoundary(list),
   read: [asyncErrorBoundary(reservationExists), read],
   update: [
     asyncErrorBoundary(reservationExists),
@@ -165,7 +179,12 @@ module.exports = {
     dateValidation,
     timeValidation,
     peopleValidation,
-    asyncErrorBoundary(update)
+    asyncErrorBoundary(update),
+  ],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists),
+
+    asyncErrorBoundary(update),
   ],
   create: [
     hasPayload,
@@ -174,7 +193,7 @@ module.exports = {
     dateValidation,
     timeValidation,
     peopleValidation,
-    asyncErrorBoundary(create)
+    asyncErrorBoundary(create),
   ],
-  delete: [asyncErrorBoundary(reservationExists), destroy],
+  delete: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(destroy)],
 };
