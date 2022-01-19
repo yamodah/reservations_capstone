@@ -1,7 +1,6 @@
 import React from "react";
 import Menu from "./Menu";
 import Routes from "./Routes";
-import NewReservation from "./NewReservation";
 import "./Layout.css";
 
 /**
@@ -20,7 +19,6 @@ function Layout() {
         </div>
         <div className="col-6">
           <Routes />
-          <NewReservation />
         </div>
       </div>
     </div>

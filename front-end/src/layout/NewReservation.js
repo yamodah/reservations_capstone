@@ -25,6 +25,7 @@ function NewReservation() {
         });
         console.log( typeof Number(e.target.value))
       };
+      
     return (
         <form >
             <div className="mb-3">
@@ -53,7 +54,7 @@ function NewReservation() {
             </div>
             <button onClick={(e)=>{
                 e.preventDefault()
-                console.log(form.reservation_date)}}>console.log the date but just the day</button>
+                console.log(form)}}>console.log the date but just the day</button>
         </form>
     )
 }
