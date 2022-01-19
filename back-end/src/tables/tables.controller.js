@@ -18,9 +18,8 @@ async function seatReservation(req, res, next) {
 }
 //removes reservation assignment from table and changes reservation status to finished
 async function clear(req, res, next) {
-  const { reservation_id } = req.body.data;
-  const { table_id } = req.params;
-  res.json({ data: await service.updateToSeated(table_id, reservation_id) });
+  const { reservation_id,table_id } = res.locals.table;
+  res.status(200).json({ data: await service.updateToSeated(table_id, reservation_id) });
 }
 
 //======VALIDATION FUNCTIONS========//
@@ -137,6 +136,16 @@ const occupancyCheck = (req,res,next)=>{
     }
     next()
 }
+const inUseValidation = (req,res,next)=>{
+    const {reservation_id} = res.locals.table
+    if(!reservation_id){
+        return next({
+            status:400,
+            message:"This table is not occupied only occupied tables can be cleared"
+        })
+    }
+    next()
+}
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -158,5 +167,5 @@ module.exports = {
     occupancyCheck,
     asyncErrorBoundary(seatReservation)
   ],
-  delete: [],
+  delete: [asyncErrorBoundary(tableExists), inUseValidation, asyncErrorBoundary(clear)],
 };
