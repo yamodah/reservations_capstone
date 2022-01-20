@@ -52,12 +52,14 @@ async function fetchJson(url, options, onCancel) {
   }
 }
 
+///////////////////////////////////
+////RESERVATIONS API FUNCTIONS////
+/////////////////////////////////
 /**
  * Retrieves all existing reservation.
  * @returns {Promise<[reservation]>}
  *  a promise that resolves to a possibly empty array of reservation saved in the database.
  */
-
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
   Object.entries(params).forEach(([key, value]) =>
@@ -66,4 +68,40 @@ export async function listReservations(params, signal) {
   return await fetchJson(url, { headers, signal }, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
+}
+export async function readReservation(reservation_id, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+  const options = {
+    method: "GET",
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+export async function createReservation(newReservation, signal) {
+  const url = `${API_BASE_URL}/reservations`;
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: newReservation }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+//handles both general reservation editing as well as cancelling reservations
+export async function updateReservation(dataToUpdate,statusChange = false, signal) {
+  let url
+  if(!statusChange){
+    url = `${API_BASE_URL}/reservations/${dataToUpdate.reservation_id}`;
+  }else{
+    url = `${API_BASE_URL}/reservations/${dataToUpdate.reservation_id}/status`
+  }
+  const options = {
+    method: "PUT",
+    headers,
+    body:JSON.stringify({data:dataToUpdate}),
+    signal,
+  };
+  return await fetchJson(url, options);
 }
