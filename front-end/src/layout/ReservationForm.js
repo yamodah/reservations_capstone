@@ -31,8 +31,8 @@ function ReservationForm() {
       const handleSubmission =async (e)=>{
           e.preventDefault()
           const AC = new AbortController()
-          createReservation(form,AC.signal)
-            .then(()=>history.push(`/dashboard?date=${form.reservation_date}`))
+          createReservation({...form},AC.signal).catch((e)=>console.log(e.message))
+          history.push(`/dashboard?date=${form.reservation_date}`)
       }
     return (
         <form onSubmit={handleSubmission}>
