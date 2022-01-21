@@ -2,7 +2,7 @@ import React, { useState }  from 'react'
 import { useHistory } from 'react-router-dom'
 import {asDateString} from "../utils/date-time"
 import { createReservation } from "../utils/api.js"
-function NewReservation() {
+function ReservationForm() {
     const date = new Date()
     const history = useHistory()
     const initialFormState = {
@@ -35,7 +35,7 @@ function NewReservation() {
             .then(()=>history.push(`/dashboard?date=${form.reservation_date}`))
       }
     return (
-        <form >
+        <form onSubmit={handleSubmission}>
             <div className="mb-3">
                 <label htmlFor="formGroupExampleInput" className="form-label"  >First Name</label>
                 <input type="text" className="form-control" id="first_name" name="first_name" placeholder="First Name" value={form.first_name} onChange={handleChange} required/>
@@ -62,10 +62,10 @@ function NewReservation() {
             </div>
             <button onClick={(e)=>{
                 e.preventDefault()
-                history.goBack()}}>cancel</button>
-            <button onClick={handleSubmission}>submit</button>
+                history.goBack()}}>Cancel</button>
+            <button type="submit">Submit</button>
         </form>
     )
 }
 
-export default NewReservation
+export default ReservationForm
