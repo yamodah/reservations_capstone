@@ -2,7 +2,6 @@ import React, { useState }  from 'react'
 import { useHistory } from 'react-router-dom'
 import {asDateString} from "../utils/date-time"
 import { createReservation } from "../utils/api.js"
-import ErrorAlert from './ErrorAlert'
 import ReservationForm from './ReservationForm'
 function NewReservation() {
     const date = new Date()
@@ -41,7 +40,7 @@ function NewReservation() {
 
       }
     return (
-        <ReservationForm handleSubmission={handleSubmission} handleChange={handleChange} error={error} handleNumberChange={handleNumberChange}/>
+        <ReservationForm handleSubmission={handleSubmission} handleChange={handleChange} error={error} handleNumberChange={handleNumberChange} form={form}/>
     )
 }
 
