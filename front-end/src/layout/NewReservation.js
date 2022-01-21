@@ -3,9 +3,10 @@ import { useHistory } from 'react-router-dom'
 import {asDateString} from "../utils/date-time"
 import { createReservation } from "../utils/api.js"
 import ErrorAlert from './ErrorAlert'
-function ReservationForm() {
+function NewReservation() {
     const date = new Date()
     const history = useHistory()
+    
     const initialFormState = {
         first_name:"",
         last_name:"",
@@ -73,4 +74,4 @@ function ReservationForm() {
     )
 }
 
-export default ReservationForm
+export default NewReservation
