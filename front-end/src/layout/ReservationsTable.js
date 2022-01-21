@@ -20,7 +20,7 @@ function ReservationsTable({ reservations }) {
         <td>{reservation.reservation_date}</td>
         <td>{reservation.reservation_time}</td>
         <td>{reservation.people}</td>
-        <th>{reservation.status}</th>
+        <th data-reservation-id-status={reservation.reservation_id}>{reservation.status}</th>
         {reservation.status === "booked" ? (
           <td style={{ display: "flex" }}>
             <button
