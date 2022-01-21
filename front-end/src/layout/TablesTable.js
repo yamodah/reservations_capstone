@@ -7,7 +7,7 @@ function TablesTable({tables}) {
     const handleClear = (table_id)=>{
         if (
             window.confirm(
-              "would you like to clear this table?"
+              "Is this table ready to seat new guests? This cannot be undone."
             )
           ) {
             const AC = new AbortController();
@@ -22,7 +22,7 @@ function TablesTable({tables}) {
                 <th scope="row">{table_name}</th>
             <td>{capacity}</td>
             <td data-table-id-status={table_id}>{reservation_id?"Occupied":"Free"}</td>
-            <td>{reservation_id&&<button onClick={()=>handleClear(table_id)} type="button" className="btn btn-dark">clearTable</button>}</td>
+            <td>{reservation_id&&<button onClick={()=>handleClear(table_id)} type="button" className="btn btn-dark" data-table-id-finish={table_id}>Finish</button>}</td>
             </tr>
         )
     })
