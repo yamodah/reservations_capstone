@@ -2,6 +2,7 @@ import React, { useState }  from 'react'
 import { useHistory } from 'react-router-dom'
 import {asDateString} from "../utils/date-time"
 import { createReservation } from "../utils/api.js"
+import ErrorAlert from './ErrorAlert'
 function ReservationForm() {
     const date = new Date()
     const history = useHistory()
@@ -15,6 +16,7 @@ function ReservationForm() {
     }
 
     const [form, setForm] = useState({...initialFormState})
+    const [error, setError] = useState(null);
     const handleChange = (e) => {
         setForm({
           ...form,
@@ -31,11 +33,14 @@ function ReservationForm() {
       const handleSubmission =async (e)=>{
           e.preventDefault()
           const AC = new AbortController()
-          createReservation(form,AC.signal).catch((e)=>console.log(e.message)).then(()=>history.push(`/dashboard?date=${form.reservation_date}`))
+          createReservation(form,AC.signal)
+          .then(()=>history.push(`/dashboard?date=${form.reservation_date}`))
+          .catch(setError)
 
       }
     return (
         <form onSubmit={handleSubmission}>
+            <ErrorAlert error={error}/>
             <div className="mb-3">
                 <label htmlFor="formGroupExampleInput" className="form-label"  >First Name</label>
                 <input type="text" className="form-control" id="first_name" name="first_name" placeholder="First Name" value={form.first_name} onChange={handleChange} required/>
