@@ -13,7 +13,7 @@ function NewReservation() {
         mobile_number:"",
         reservation_date:asDateString(date),
         reservation_time:date.toTimeString().slice(0,5),
-        people:"",
+        people:0,
     }
 
     const [form, setForm] = useState({...initialFormState})
