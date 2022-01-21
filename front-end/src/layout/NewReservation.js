@@ -1,6 +1,7 @@
 import React, { useState }  from 'react'
 import { useHistory } from 'react-router-dom'
 import {asDateString} from "../utils/date-time"
+import { createReservation } from "../utils/api.js"
 function NewReservation() {
     const date = new Date()
     const history = useHistory()
@@ -30,7 +31,8 @@ function NewReservation() {
       const handleSubmission =async (e)=>{
           e.preventDefault()
           const AC = new AbortController()
-          
+          createReservation(form,AC.signal)
+            .then(()=>history.push(`/dashboard?date=${form.reservation_date}`))
       }
     return (
         <form >
@@ -61,9 +63,7 @@ function NewReservation() {
             <button onClick={(e)=>{
                 e.preventDefault()
                 history.goBack()}}>cancel</button>
-            <button onClick={(e)=>{
-                e.preventDefault()
-                console.log(form)}}>submit</button>
+            <button onClick={handleSubmission}>submit</button>
         </form>
     )
 }
