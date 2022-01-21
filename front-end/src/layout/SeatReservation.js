@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import {createTable, listTables, readReservation, updateReservation, updateTable} from "../utils/api"
+import {listTables, readReservation, updateTable} from "../utils/api"
 import ErrorAlert from './ErrorAlert'
 function SeatReservation() {
     const history = useHistory()
@@ -8,9 +8,9 @@ function SeatReservation() {
     const [tables, setTables] = useState([])
     const [chosenTable, setChosenTable]= useState({table_id:null})
     const [error, setError]= useState(null)
-    const [reservation, setReservation] = useState({})
+    // const [reservation, setReservation] = useState({})
     useEffect(loadTables,[])
-    useEffect(loadReservationData,[reservation_id])
+    // useEffect(loadReservationData,[reservation_id])
     function loadTables(){
         const AC = new AbortController();
         listTables(AC.signal)
@@ -18,14 +18,14 @@ function SeatReservation() {
           .catch(setError);
         return () => AC.abort();
       }
-      function loadReservationData() {
-        const abortController = new AbortController();
-        setError(null);
-        readReservation(reservation_id, abortController.signal)
-          .then(setReservation)
-          .catch(setError);
-        return () => abortController.abort();
-      }
+    //   function loadReservationData() {
+    //     const abortController = new AbortController();
+    //     setError(null);
+    //     readReservation(reservation_id, abortController.signal)
+    //       .then(setReservation)
+    //       .catch(setError);
+    //     return () => abortController.abort();
+    //   }
       const handleChange = (e) => {
           setChosenTable({
             ...chosenTable,
@@ -59,7 +59,7 @@ function SeatReservation() {
              <button onClick={(e)=>{
                 e.preventDefault()
                 history.goBack()}}>Cancel</button>
-            <button type="submit">Submit</button>
+            <button type="submit" disabled={!chosenTable.table_id}>Submit</button>
         </form>
     )
 }
