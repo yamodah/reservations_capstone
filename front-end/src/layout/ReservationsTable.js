@@ -11,19 +11,26 @@ function ReservationsTable({reservations}) {
             <td>{reservation_time}</td>
             <td>{people}</td>
             <td>{status}</td>
+            {status==="booked"?
+            <td><button>Seat</button>
+            <button>Edit</button>
+            <button>Cancel</button></td>
+            :null}
             </tr>
         )
     })
     return (
-        <table class="table">
-        <thead class="thead-light">
+        <table className="table" >
+        <thead className="thead-light">
             <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Phone</th>
             <th scope="col">Date</th>
             <th scope="col">Time</th>
+            <th scope="col">People</th>
             <th scope="col">Status</th>
+            <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>

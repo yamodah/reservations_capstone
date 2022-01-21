@@ -11,18 +11,18 @@ function TablesTable({tables}) {
             )
           ) {
             const AC = new AbortController();
-            clearTable({table_id}, AC.signal).then(()=>history.push("/"));
+            clearTable(table_id, AC.signal).then(()=>history.push("/")).catch((e)=>console.log(e.message));
             return () => AC.abort();
           }
 
     }
-    const reservationsRows = tables.map(({reservation_id, table_id,capacity, table_name})=>{
+    const tablesRows = tables.map(({reservation_id, table_id,capacity, table_name})=>{
         return(
             <tr key={table_id}>
-            <th scope="row">{table_name}</th>
+                <th scope="row">{table_name}</th>
             <td>{capacity}</td>
             <td data-table-id-status={table_id}>{reservation_id?"Occupied":"Free"}</td>
-            <button onClick={()=>handleClear(table_id)}>clearTable</button>
+            <td>{reservation_id&&<button onClick={()=>handleClear(table_id)}>clearTable</button>}</td>
             </tr>
         )
     })
@@ -30,16 +30,14 @@ function TablesTable({tables}) {
         <table class="table">
         <thead class="thead-light">
             <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Phone</th>
-            <th scope="col">Date</th>
-            <th scope="col">Time</th>
-            <th scope="col">Status</th>
+            <th scope="col">Table</th>
+            <th scope="col">Capacity</th>
+            <th scope="col">Vaccant ?</th>
+            <th scope="col">Done</th>
             </tr>
         </thead>
         <tbody>
-            {reservationsRows}
+            {tablesRows}
         </tbody>
         </table>
     )

@@ -37,20 +37,20 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <ErrorAlert error={error} />
-      <div style={{display:"flex",flexDirection:"row"}}>
-       <div>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {date}</h4>
+      <div style={{display:"flex", width:"100%", justifyContent:"space-between"}}>
+
+        <div className="d-md-flex mb-3" style={{flexDirection:"column", flex:"1"}}>
+            <h4 className="mb-0">Reservations for {date}</h4>
+            <ReservationsTable reservations={reservations}/>
+        </div>
+
+        <div className="d-md-flex mb-3" style={{flexDirection:"column", flex:"1"}}>
+            <h4 className="mb-0">Tables</h4>
+            <TablesTable tables={tables}/>
+        </div>
+
       </div>
-      <ReservationsTable reservations={reservations}/>
-      </div> 
-      <div>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Tables</h4>
-      </div>
-      <TablesTable tables={tables}/>
-      </div>
-      </div>
+
     </main>
   );
 }
