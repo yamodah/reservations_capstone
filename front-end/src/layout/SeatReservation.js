@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import {listTables, readReservation, updateTable} from "../utils/api"
+import {listTables, updateTable} from "../utils/api"
 import ErrorAlert from './ErrorAlert'
 function SeatReservation() {
     const history = useHistory()
