@@ -1,15 +1,6 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
-//helper functions
-function asDateString(date) {
-  return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
-    .toString(10)
-    .padStart(2, "0")}-${date.getDate().toString(10).padStart(2, "0")}`;
-}
-function today() {
-  return asDateString(new Date());
-}
 /**
  * List handler for reservation resources
  */
@@ -23,7 +14,7 @@ async function list(req, res) {
   } else if (mobile_number) {
     data = await service.listByMobileNumber(mobile_number);
   } else {
-    data = await service.list(asDateString(today()));
+    data = await service.list();
   }
   res.json({ data });
 }
