@@ -37,14 +37,14 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <ErrorAlert error={error} />
-      <div style={{display:"flex", width:"100%", justifyContent:"space-between"}}>
+      <div>
 
         <div className="d-md-flex mb-3" style={{flexDirection:"column", flex:"1"}}>
             <h4 className="mb-0">Reservations for {date}</h4>
             <ReservationsTable reservations={reservations}/>
         </div>
 
-        <div className="d-md-flex mb-3" style={{flexDirection:"column", flex:"1"}}>
+        <div className="d-md-flex mb-3" style={{flexDirection:"column"}}>
             <h4 className="mb-0">Tables</h4>
             <TablesTable tables={tables}/>
         </div>

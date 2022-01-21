@@ -13,11 +13,11 @@ import "./Layout.css";
 function Layout() {
   return (
     <div className="container-fluid">
-      <div className="row h-100">
-        <div className="col-md-2 side-bar">
+      <div className="row">
+        <div className="col-lg-2 side-bar">
           <Menu />
         </div>
-        <div style={{display:"flex"}}>
+        <div className="col">
           <Routes />
         </div>
       </div>

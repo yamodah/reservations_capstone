@@ -6,7 +6,7 @@ function NewTable() {
     const history = useHistory()
     const initialFormState = {
         table_name:"",
-        capacity:0
+        capacity:""
     }
     const [form, setForm] = useState({...initialFormState})
     const [error, setError] = useState(null)

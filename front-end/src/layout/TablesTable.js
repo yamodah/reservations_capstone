@@ -22,7 +22,7 @@ function TablesTable({tables}) {
                 <th scope="row">{table_name}</th>
             <td>{capacity}</td>
             <td data-table-id-status={table_id}>{reservation_id?"Occupied":"Free"}</td>
-            <td>{reservation_id&&<button onClick={()=>handleClear(table_id)}>clearTable</button>}</td>
+            <td>{reservation_id&&<button onClick={()=>handleClear(table_id)} type="button" className="btn btn-dark">clearTable</button>}</td>
             </tr>
         )
     })

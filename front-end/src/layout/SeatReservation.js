@@ -45,7 +45,7 @@ function SeatReservation() {
         }
 
     const tableOptions = tables.map((table)=>{
-        return(<option key={table.table_id} value={table.table_id}>
+        return(<option key={table.table_id} value={table.table_id} >
             {table.table_name} - {table.capacity}
         </option>)
     })
@@ -55,7 +55,7 @@ function SeatReservation() {
             <ErrorAlert error={error}/>
             <div className="form-group">
                 <label htmlFor="table_id">Choose a Table</label>
-                <select className="form-control" id="table_id" onChange={handleChange}>
+                <select className="form-control" id="table_id" name="table_id" onChange={handleChange}>
                     <option value="">** No Selection **</option>
                     {tables.length && tableOptions}
                 </select>
