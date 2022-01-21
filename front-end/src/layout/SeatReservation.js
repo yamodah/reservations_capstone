@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react'
-import { useParams } from 'react-router-dom'
-import {listTables, readReservation} from "../utils/api"
+import { useParams, useHistory } from 'react-router-dom'
+import {createTable, listTables, readReservation, updateReservation, updateTable} from "../utils/api"
 import ErrorAlert from './ErrorAlert'
 function SeatReservation() {
+    const history = useHistory()
     const {reservation_id} = useParams
     const [tables, setTables] = useState([])
     const [chosenTable, setChosenTable]= useState({table_id:null})
@@ -25,20 +26,28 @@ function SeatReservation() {
           .catch(setError);
         return () => abortController.abort();
       }
+      const handleChange = (e) => {
+          setChosenTable({
+            ...chosenTable,
+            [e.target.id]: e.target.value,
+          });
+        };
+      const handleSubmission =async (e)=>{
+            e.preventDefault()
+            const AC = new AbortController()
+            updateTable({...chosenTable, reservation_id}, AC.signal)
+            .then(()=>history.push("/"))
+            .catch(setError)
+        }
 
     const tableOptions = tables.map((table)=>{
         <option key={table.table_id} value={table.table_id}>
             {table.table_name} - {table.capacity}
         </option>
     })
-    const handleChange = (e) => {
-        setChosenTable({
-          ...reservation,
-          [e.target.id]: e.target.value,
-        });
-      };
+
     return (
-        <form>
+        <form onSubmit={handleSubmission}>
             <ErrorAlert error={error}/>
             <div class="form-group">
                 <label htmlFor="table_id">Choose a Table</label>
@@ -47,6 +56,10 @@ function SeatReservation() {
                     {tables.length && tableOptions}
                 </select>
              </div>
+             <button onClick={(e)=>{
+                e.preventDefault()
+                history.goBack()}}>Cancel</button>
+            <button type="submit">Submit</button>
         </form>
     )
 }
