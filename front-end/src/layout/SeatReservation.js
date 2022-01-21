@@ -4,7 +4,7 @@ import {listTables, updateTable} from "../utils/api"
 import ErrorAlert from './ErrorAlert'
 function SeatReservation() {
     const history = useHistory()
-    const {reservation_id} = useParams
+    const {reservation_id} = useParams()
     const [tables, setTables] = useState([])
     const [chosenTable, setChosenTable]= useState({table_id:null})
     const [error, setError]= useState(null)
@@ -31,11 +31,15 @@ function SeatReservation() {
             ...chosenTable,
             [e.target.id]: e.target.value,
           });
+          // console.log(reservation_id)
         };
       const handleSubmission =async (e)=>{
             e.preventDefault()
+            setError(null)
             const AC = new AbortController()
-            updateTable({...chosenTable, reservation_id}, AC.signal)
+            console.log({...chosenTable})
+            // console.log({reservation_id})
+            updateTable({reservation_id},chosenTable.table_id, AC.signal)
             .then(()=>history.push("/"))
             .catch(setError)
         }
@@ -49,9 +53,9 @@ function SeatReservation() {
     return (
         <form onSubmit={handleSubmission}>
             <ErrorAlert error={error}/>
-            <div class="form-group">
+            <div className="form-group">
                 <label htmlFor="table_id">Choose a Table</label>
-                <select class="form-control" id="table_id" onChange={handleChange}>
+                <select className="form-control" id="table_id" onChange={handleChange}>
                     <option value="">** No Selection **</option>
                     {tables.length && tableOptions}
                 </select>

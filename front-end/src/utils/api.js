@@ -128,12 +128,12 @@ export async function createTable(newTable, signal) {
   };
   return await fetchJson(url, options);
 }
-export async function updateTable(dataToUpdate, signal) {
-  const url = `${API_BASE_URL}/tables/${dataToUpdate.table_id}/seat`;
+export async function updateTable(data, table_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({ data: dataToUpdate }),
+    body: JSON.stringify({ data }),
     signal,
   };
   return await fetchJson(url, options);
