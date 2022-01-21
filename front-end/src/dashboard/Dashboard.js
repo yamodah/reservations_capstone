@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-
+import ReservationsTable from "../layout/ReservationsTable";
+import TablesTable from "../layout/TablesTable";
 /**
  * Defines the dashboard page.
  * @param date
@@ -14,10 +15,10 @@ function Dashboard({ date }) {
   const [error, setError] = useState(null);
 
 
-  useEffect(loadDashboard, [date]);
+  useEffect(loadReservations, [date]);
   useEffect(loadTables, []);
 
-  function loadDashboard() {
+  function loadReservations() {
     const abortController = new AbortController();
     setError(null);
     listReservations({ date }, abortController.signal)
@@ -41,13 +42,13 @@ function Dashboard({ date }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
-      {JSON.stringify(reservations)}
+      <ReservationsTable reservations={reservations}/>
       </div> 
       <div>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Tables</h4>
       </div>
-      {JSON.stringify(tables)}
+      <TablesTable tables={tables}/>
       </div>
       </div>
     </main>
