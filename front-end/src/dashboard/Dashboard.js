@@ -10,6 +10,7 @@ import ErrorAlert from "../layout/ErrorAlert";
  */
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
+  const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
   useEffect(loadDashboard, [date]);
@@ -22,7 +23,13 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
     return () => abortController.abort();
   }
-
+  function loadTables(){
+    const AC = new AbortController();
+    listReservations({ date }, AC.signal)
+      .then(setTables)
+      .catch(console.error);
+    return () => AC.abort();
+  }
   return (
     <main>
       <h1>Dashboard</h1>
