@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 
 /**
@@ -27,7 +27,7 @@ function Dashboard({ date }) {
   }
   function loadTables(){
     const AC = new AbortController();
-    listReservations(AC.signal)
+    listTables(AC.signal)
       .then(setTables)
       .catch(setTablesError);
     return () => AC.abort();
@@ -35,16 +35,23 @@ function Dashboard({ date }) {
   return (
     <main>
       <h1>Dashboard</h1>
+      <div style={{display:"flex",flexDirection:"row"}}>
+       <div>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
-      <ErrorAlert error={reservationsError} />
-      <ErrorAlert error={tablesError} />
       {JSON.stringify(reservations)}
+      <ErrorAlert error={reservationsError} />
+      </div> 
+      <div>
+      
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Tables</h4>
       </div>
+      <ErrorAlert error={tablesError} />
       {JSON.stringify(tables)}
+      </div>
+      </div>
     </main>
   );
 }

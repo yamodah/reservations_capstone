@@ -31,8 +31,8 @@ function ReservationForm() {
       const handleSubmission =async (e)=>{
           e.preventDefault()
           const AC = new AbortController()
-          createReservation({...form},AC.signal).catch((e)=>console.log(e.message))
-          history.push(`/dashboard?date=${form.reservation_date}`)
+          createReservation(form,AC.signal).catch((e)=>console.log(e.message)).then(()=>history.push(`/dashboard?date=${form.reservation_date}`))
+
       }
     return (
         <form onSubmit={handleSubmission}>
@@ -46,7 +46,7 @@ function ReservationForm() {
             </div>
             <div className="mb-3">
                 <label htmlFor="formGroupExampleInput" className="form-label">Mobile Number</label>
-                <input type="text" className="form-control" id="mobile_number" name="mobile_number"placeholder="First Name"  value={form.mobile_number} onChange={handleChange} required/>
+                <input type="text" className="form-control" id="mobile_number" name="mobile_number"placeholder="Mobile Number"  value={form.mobile_number} onChange={handleChange} required/>
             </div>
             <div className="mb-3">
                 <label htmlFor="formGroupExampleInput2" className="form-label">Date</label>
