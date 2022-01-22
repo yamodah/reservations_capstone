@@ -2,7 +2,7 @@ import React from "react";
 // import { useHistory } from "react-router-dom";
 // import { updateReservation } from "../utils/api";
 function ReservationsTable({ reservations }) {
-//   const history = useHistory();
+  // const history = useHistory();
 //   const handleEdit = (reservation) => {
 
 //   };
@@ -33,7 +33,7 @@ function ReservationsTable({ reservations }) {
                 <a href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a>
             </button>
             <button type="button" className="btn btn-primary">
-              Edit
+            <a href={`/reservations/${reservation.reservation_id}/edit`}>Edit</a>
             </button>
             <button type="button" className="btn btn-danger">
               Cancel

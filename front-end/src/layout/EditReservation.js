@@ -1,12 +1,21 @@
 import React, {useState, useEffect} from 'react'
 import { useHistory, useParams } from 'react-router'
 import { readReservation, updateReservation } from '../utils/api'
+import { formatAsDate } from '../utils/date-time'
 import ReservationForm from './ReservationForm'
 
 function EditReservation() {
     const history = useHistory()
     const {reservation_id} = useParams()
-    const [form, setForm] = useState(null)
+    const initialFormState = {
+        first_name:"",
+        last_name:"",
+        mobile_number:"",
+        reservation_date:"",
+        reservation_time:"",
+        people:"",
+    }
+    const [form, setForm] = useState(initialFormState)
     const [error, setError] = useState(null);
 
     useEffect(loadReservation,[reservation_id])
@@ -24,6 +33,7 @@ function EditReservation() {
           ...form,
           [e.target.id]: e.target.value,
         });
+        console.log(form)
       };
       const handleNumberChange = (e) => {
         setForm({
@@ -35,10 +45,12 @@ function EditReservation() {
           e.preventDefault()
           const AC = new AbortController()
           updateReservation(form,AC.signal)
-          .then(()=>history.goBack())
+          .then(()=>history.push(`/dashboard?date=${form.reservation_date}`))
           .catch(setError)
       }
-      
+      if(form.first_name){
+          form.reservation_date = formatAsDate(form.reservation_date)
+      }
     return (
         <ReservationForm handleSubmission={handleSubmission} handleChange={handleChange} error={error} handleNumberChange={handleNumberChange} form={form}/>
     )
