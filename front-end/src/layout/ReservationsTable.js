@@ -1,14 +1,22 @@
 import React from "react";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { updateReservation } from "../utils/api";
 // import { updateReservation } from "../utils/api";
 function ReservationsTable({ reservations }) {
-  // const history = useHistory();
-//   const handleEdit = (reservation) => {
+  const history = useHistory();
 
-//   };
-//   const handleCancel = (reservation) => {
-
-//   };
+  const handleCancel = (reservation) => {
+    if (
+      window.confirm(
+        "Do you want to cancel this reservation? This cannot be undone."
+      )
+    ) {
+      const AC = new AbortController();
+       updateReservation({...reservation,status:"cancelled"}, true, AC.signal)
+       .then(history.push("/"));
+      return () => AC.abort();
+    }
+  }
   const reservationsRows = reservations.map((reservation) => {
     return (
       <tr key={reservation.reservation_id}>
@@ -35,7 +43,11 @@ function ReservationsTable({ reservations }) {
             <button type="button" className="btn btn-primary">
             <a href={`/reservations/${reservation.reservation_id}/edit`}>Edit</a>
             </button>
-            <button type="button" className="btn btn-danger">
+            <button type="button" 
+            className="btn btn-danger" 
+            data-reservation-id-cancel={reservation.reservation_id}
+            onClick={()=>handleCancel(reservation)}
+            >
               Cancel
             </button>
           </td>
