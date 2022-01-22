@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { listReservations, listTables } from "../utils/api";
+import { today, previous, next } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsTable from "../layout/ReservationsTable";
 import TablesTable from "../layout/TablesTable";
@@ -13,15 +14,14 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
   const [error, setError] = useState(null);
-
-
-  useEffect(loadReservations, [date]);
+  const [currentDate, setCurrentDate] = useState(date)
+  useEffect(loadReservations, [date,currentDate]);
   useEffect(loadTables, []);
-
+  // console.log(currentDate)
   function loadReservations() {
     const abortController = new AbortController();
     setError(null);
-    listReservations({ date }, abortController.signal)
+    listReservations({ date:currentDate }, abortController.signal)
       .then(setReservations)
       .catch(setError);
     return () => abortController.abort();
@@ -38,9 +38,13 @@ function Dashboard({ date }) {
       <h1>Dashboard</h1>
       <ErrorAlert error={error} />
       <div>
-
+      <div className="btn-group" role="group" aria-label="Basic example">
+        <button type="button" className="btn btn-secondary" onClick={()=>setCurrentDate(previous(currentDate))}>Previous</button>
+        <button type="button" className="btn btn-secondary" onClick={()=>setCurrentDate(today())}>Today</button>
+        <button type="button" className="btn btn-secondary" onClick={()=>setCurrentDate(next(currentDate))}>Next</button>
+      </div>
         <div className="d-md-flex mb-3" style={{flexDirection:"column", flex:"1"}}>
-            <h4 className="mb-0">Reservations for {date}</h4>
+            <h4 className="mb-0">Reservations for {currentDate}</h4>
             <ReservationsTable reservations={reservations}/>
         </div>
 

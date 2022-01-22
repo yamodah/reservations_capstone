@@ -27,8 +27,8 @@ function TablesTable({tables}) {
         )
     })
     return (
-        <table class="table">
-        <thead class="thead-light">
+        <table className="table">
+        <thead className="thead-light">
             <tr>
             <th scope="col">Table</th>
             <th scope="col">Capacity</th>
