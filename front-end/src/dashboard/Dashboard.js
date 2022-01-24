@@ -38,7 +38,7 @@ function Dashboard({ date }) {
       <h1 className="my-3" >Dashboard</h1>
       <ErrorAlert error={error} className="my-3"/>
       <div>
-      <div className="btn-group" role="group" aria-label="Basic example">
+      <div className="btn-group" role="group" aria-label="date_selection">
         <button type="button" className="btn btn-secondary" onClick={()=>setCurrentDate(previous(currentDate))}>Previous</button>
         <button type="button" className="btn btn-secondary" onClick={()=>setCurrentDate(today())}>Today</button>
         <button type="button" className="btn btn-secondary" onClick={()=>setCurrentDate(next(currentDate))}>Next</button>

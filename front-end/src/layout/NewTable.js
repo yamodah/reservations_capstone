@@ -31,6 +31,7 @@ function NewTable() {
         });
       };
     return (
+        <div style={{marginTop:"75px"}}>
         <form onSubmit={handleSubmission}>
             <ErrorAlert error={error}/>
             <div className="mb-3">
@@ -43,9 +44,14 @@ function NewTable() {
             </div>
             <button onClick={(e)=>{
                 e.preventDefault()
-                history.goBack()}}>Cancel</button>
-            <button type="submit">Submit</button>
+                history.goBack()}}
+                className="btn btn-danger mr-3"
+                >Cancel</button>
+            <button type="submit"
+                className="btn btn-success"
+                >Submit</button>
         </form>
+        </div>
     )
 }
 

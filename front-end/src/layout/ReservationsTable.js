@@ -31,6 +31,7 @@ function ReservationsTable({ reservations }) {
         <th data-reservation-id-status={reservation.reservation_id}>{reservation.status}</th>
         {reservation.status === "booked" ? (
           <td style={{ display: "flex" }}>
+            <div className="btn-group" role="group" aria-label="date_selection">
             <button
               type="button"
               className="btn btn-success"
@@ -47,6 +48,7 @@ function ReservationsTable({ reservations }) {
             >
               Cancel
             </button>
+            </div>
           </td>
         ) : <td>N/A</td>}
       </tr>

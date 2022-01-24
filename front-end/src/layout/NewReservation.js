@@ -40,8 +40,10 @@ function NewReservation() {
 
       }
     return (
-        <ReservationForm handleSubmission={handleSubmission} handleChange={handleChange} error={error} handleNumberChange={handleNumberChange} form={form}/>
-    )
+      <div style={{marginTop:"75px"}}>
+      <ReservationForm handleSubmission={handleSubmission} handleChange={handleChange} error={error} handleNumberChange={handleNumberChange} form={form}/>
+      </div>
+      )
 }
 
 export default NewReservation

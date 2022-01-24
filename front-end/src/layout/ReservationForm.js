@@ -30,10 +30,14 @@ function ReservationForm({handleSubmission,handleChange,handleNumberChange,form,
                 <label htmlFor="formGroupExampleInput2" className="form-label">People</label>
                 <input type="number" className="form-control" id="people" name="people"value={form.people} onChange={handleNumberChange} min={1} required/>
             </div>
+            <div style={{display:"flex"}}>
             <button onClick={(e)=>{
                 e.preventDefault()
-                history.goBack()}}>Cancel</button>
-            <button type="submit">Submit</button>
+                history.goBack()}}
+                className="btn btn-danger mr-3"
+                >Cancel</button>
+            <button type="submit" className="btn btn-success">Submit</button>
+            </div>
         </form>
     )
 }
