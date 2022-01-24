@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { updateReservation } from "../utils/api";
+import { updateReservation } from "../../utils/api";
 // import { updateReservation } from "../utils/api";
 function ReservationsTable({ reservations }) {
   const history = useHistory();

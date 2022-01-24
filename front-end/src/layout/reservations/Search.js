@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import { listReservations } from '../utils/api';
+import { listReservations } from '../../utils/api';
 import ReservationsTable from './ReservationsTable'
 
 function Search() {

@@ -1,7 +1,7 @@
 import React, { useState }  from 'react'
 import { useHistory } from 'react-router-dom'
-import {asDateString} from "../utils/date-time"
-import { createReservation } from "../utils/api.js"
+import {asDateString} from "../../utils/date-time"
+import { createReservation } from "../../utils/api.js"
 import ReservationForm from './ReservationForm'
 function NewReservation() {
     const date = new Date()

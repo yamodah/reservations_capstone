@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { useHistory, useParams } from 'react-router'
-import { readReservation, updateReservation } from '../utils/api'
-import { formatAsDate } from '../utils/date-time'
+import { readReservation, updateReservation } from '../../utils/api'
+import { formatAsDate } from '../../utils/date-time'
 import ReservationForm from './ReservationForm'
 
 function EditReservation() {
