@@ -3,7 +3,7 @@ import { listReservations, listTables } from "../utils/api";
 import { today, previous, next } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsTable from "../layout/reservations/ReservationsTable";
-import TablesTable from "../layout/TablesTable";
+import TablesTable from "../layout/tables/TablesTable";
 /**
  * Defines the dashboard page.
  * @param date

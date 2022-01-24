@@ -1,6 +1,6 @@
 import React from 'react'
 import {useHistory} from "react-router-dom"
-import { clearTable } from '../utils/api';
+import { clearTable } from '../../utils/api';
 
 function TablesTable({tables}) {
     const history = useHistory()
