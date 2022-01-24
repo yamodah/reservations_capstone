@@ -49,7 +49,7 @@ function Dashboard({ date }) {
         </div>
 
         <div className="d-md-flex mb-3" style={{flexDirection:"column"}}>
-            <h4 className="mb-0">Tables</h4>
+            <h4 className="my-3">Tables</h4>
             <TablesTable tables={tables}/>
         </div>
 

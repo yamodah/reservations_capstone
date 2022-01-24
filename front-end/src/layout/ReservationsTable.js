@@ -12,11 +12,14 @@ function ReservationsTable({ reservations }) {
       )
     ) {
       const AC = new AbortController();
-       updateReservation({...reservation,status:"cancelled"}, true, AC.signal)
-       .then(history.push("/"));
+      updateReservation(
+        { ...reservation, status: "cancelled" },
+        true,
+        AC.signal
+      ).then(history.push("/"));
       return () => AC.abort();
     }
-  }
+  };
   const reservationsRows = reservations.map((reservation) => {
     return (
       <tr key={reservation.reservation_id}>
@@ -28,29 +31,43 @@ function ReservationsTable({ reservations }) {
         <td>{reservation.reservation_date}</td>
         <td>{reservation.reservation_time}</td>
         <td>{reservation.people}</td>
-        <th data-reservation-id-status={reservation.reservation_id}>{reservation.status}</th>
+        <th data-reservation-id-status={reservation.reservation_id}>
+          {reservation.status}
+        </th>
         {reservation.status === "booked" ? (
           <td style={{ display: "flex" }}>
             <div className="btn-group" role="group" aria-label="date_selection">
-            <button
-              type="button"
-              className="btn btn-success"
-            >
-                <a href={`/reservations/${reservation.reservation_id}/seat`} style={{textDecoration:"none", color:"white"}}>Seat</a>
-            </button>
-            <button type="button" className="btn btn-primary">
-            <a href={`/reservations/${reservation.reservation_id}/edit`} style={{textDecoration:"none", color:"white"}}>Edit</a>
-            </button>
-            <button type="button" 
-            className="btn btn-danger" 
-            data-reservation-id-cancel={reservation.reservation_id}
-            onClick={()=>handleCancel(reservation)}
-            >
-              Cancel
-            </button>
+              <button type="button" className="btn btn-success">
+                <a
+                  href={`/reservations/${reservation.reservation_id}/seat`}
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  Seat
+                </a>
+              </button>
+
+              <button type="button" className="btn btn-primary">
+              <a
+                href={`/reservations/${reservation.reservation_id}/edit`}
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                  Edit{" "}
+              </a>
+                </button>
+
+              <button
+                type="button"
+                className="btn btn-danger"
+                data-reservation-id-cancel={reservation.reservation_id}
+                onClick={() => handleCancel(reservation)}
+              >
+                Cancel
+              </button>
             </div>
           </td>
-        ) : <td>N/A</td>}
+        ) : (
+          <td>N/A</td>
+        )}
       </tr>
     );
   });

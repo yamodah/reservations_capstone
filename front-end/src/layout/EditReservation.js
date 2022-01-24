@@ -52,7 +52,9 @@ function EditReservation() {
           form.reservation_date = formatAsDate(form.reservation_date)
       }
     return (
+      <div style={{marginTop:"75px"}}>
         <ReservationForm handleSubmission={handleSubmission} handleChange={handleChange} error={error} handleNumberChange={handleNumberChange} form={form}/>
+        </div>
     )
 }
 

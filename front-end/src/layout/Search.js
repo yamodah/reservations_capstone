@@ -15,7 +15,7 @@ function Search() {
           .catch(console.error)
     }
     return (
-        <div className='col' style={{minHeight:"1000px"}}>
+        <div className='col' >
           <h3 style={{textAlign:"center", margin:"50px 0 50px 0"}}>Search by phone number</h3>
         <form onSubmit={handleSearch}>
         <div className="m-3" style={{display:"flex", justifyContent:"center"}}>
