@@ -13,8 +13,8 @@ import "./Layout.css";
 function Layout() {
   return (
     <div className="container-fluid">
-      <div className="row">
-        <div className="col-lg-2 side-bar">
+      <div className="row" style={{minHeight:"1000px"}}>
+        <div className="col-lg-2 side-bar" style={{ paddingTop:"75px"}}>
           <Menu />
         </div>
         <div className="col">

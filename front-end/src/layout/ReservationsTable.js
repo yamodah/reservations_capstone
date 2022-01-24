@@ -34,14 +34,11 @@ function ReservationsTable({ reservations }) {
             <button
               type="button"
               className="btn btn-success"
-            //   onClick={() =>
-            //     history.push(`/reservations/${reservation.reservation_id}/seat`)
-            //   }
             >
-                <a href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a>
+                <a href={`/reservations/${reservation.reservation_id}/seat`} style={{textDecoration:"none", color:"white"}}>Seat</a>
             </button>
             <button type="button" className="btn btn-primary">
-            <a href={`/reservations/${reservation.reservation_id}/edit`}>Edit</a>
+            <a href={`/reservations/${reservation.reservation_id}/edit`} style={{textDecoration:"none", color:"white"}}>Edit</a>
             </button>
             <button type="button" 
             className="btn btn-danger" 
@@ -51,7 +48,7 @@ function ReservationsTable({ reservations }) {
               Cancel
             </button>
           </td>
-        ) : null}
+        ) : <td>N/A</td>}
       </tr>
     );
   });

@@ -15,11 +15,12 @@ function Search() {
           .catch(console.error)
     }
     return (
-        <div>
+        <div className='col' style={{minHeight:"1000px"}}>
+          <h3 style={{textAlign:"center", margin:"50px 0 50px 0"}}>Search by phone number</h3>
         <form onSubmit={handleSearch}>
-        <div className="mb-3">
+        <div className="m-3" style={{display:"flex", justifyContent:"center"}}>
            <input id="mobile_number"type="text" value={number} onChange={handleChange} name="mobile_number"/>
-           <button type="Submit" className=''>Find</button>
+           <button type="Submit" className="btn btn-primary">Find</button>
         </div>
         </form>
            <ReservationsTable reservations={reservations}/>

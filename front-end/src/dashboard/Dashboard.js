@@ -34,9 +34,9 @@ function Dashboard({ date }) {
     return () => AC.abort();
   }
   return (
-    <main>
-      <h1>Dashboard</h1>
-      <ErrorAlert error={error} />
+    <main style={{paddingTop:"50px", textAlign:"center"}} >
+      <h1 className="my-3" >Dashboard</h1>
+      <ErrorAlert error={error} className="my-3"/>
       <div>
       <div className="btn-group" role="group" aria-label="Basic example">
         <button type="button" className="btn btn-secondary" onClick={()=>setCurrentDate(previous(currentDate))}>Previous</button>
@@ -44,7 +44,7 @@ function Dashboard({ date }) {
         <button type="button" className="btn btn-secondary" onClick={()=>setCurrentDate(next(currentDate))}>Next</button>
       </div>
         <div className="d-md-flex mb-3" style={{flexDirection:"column", flex:"1"}}>
-            <h4 className="mb-0">Reservations for {currentDate}</h4>
+            <h4 className="my-3">Reservations for {currentDate}</h4>
             <ReservationsTable reservations={reservations}/>
         </div>
 
