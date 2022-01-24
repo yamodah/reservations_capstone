@@ -16,7 +16,7 @@ function NewTable() {
         createTable(form,AC.signal)
         .then(()=>history.push("/"))
         .catch(setError)
-
+        return () => AC.abort();
     }
     const handleChange = (e) => {
         setForm({

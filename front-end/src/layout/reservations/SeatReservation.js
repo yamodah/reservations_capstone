@@ -42,6 +42,7 @@ function SeatReservation() {
             updateTable({reservation_id},chosenTable.table_id, AC.signal)
             .then(()=>history.push("/"))
             .catch(setError)
+            return () => AC.abort();
         }
 
     const tableOptions = tables.map((table)=>{

@@ -37,7 +37,7 @@ function NewReservation() {
           createReservation(form,AC.signal)
           .then(()=>history.push(`/dashboard?date=${form.reservation_date}`))
           .catch(setError)
-
+          return () => AC.abort();
       }
     return (
       <div style={{marginTop:"75px"}}>

@@ -47,6 +47,7 @@ function EditReservation() {
           updateReservation(form,AC.signal)
           .then(()=>history.push(`/dashboard?date=${form.reservation_date}`))
           .catch(setError)
+          return () => AC.abort();
       }
       if(form.first_name){
           form.reservation_date = formatAsDate(form.reservation_date)
