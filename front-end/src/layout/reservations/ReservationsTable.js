@@ -25,7 +25,7 @@ function ReservationsTable({ reservations }) {
       <tr key={reservation.reservation_id}>
         <th scope="row">{reservation.reservation_id}</th>
         <th>
-          {reservation.last_name},{reservation.first_name}
+          {reservation.last_name}, {reservation.first_name}
         </th>
         <td>{reservation.mobile_number}</td>
         <td>{reservation.reservation_date}</td>
